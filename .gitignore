@@ -302,3 +302,10 @@ sketch
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/git,java,visualstudiocode,intellij+all,react,node
+# Ignorar directorios y archivos temporales
+backend/.idea/
+backend/target/
+
+# Ignorar archivos específicos de configuración
+backend/src/main/resources/application.properties
+backend/src/main/resources/application.properties~
