@@ -1,0 +1,46 @@
+package com.homechallenger.security;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.GenericFilterBean;
+
+import java.io.IOException;
+
+public class JWTFilter extends GenericFilterBean {
+
+    private final TokenProvider tokenProvider;
+
+    // Inyección del TokenProvider
+
+    public JWTFilter(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        // Obtener el token del header Authorization
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        String bearerToken = httpServletRequest.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            String jwt = bearerToken.substring(7); // Eliminar "Bearer " para obtener solo el token
+            try {
+                // Obtener la autenticación a partir del token
+                Authentication authentication = tokenProvider.getAuthentication(jwt);
+                // Establecer el contexto de seguridad
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (Exception e) {
+                // Manejar la excepción si el token no es válido o está expirado
+                SecurityContextHolder.clearContext(); // Limpiar el contexto en caso de error
+                // Podrías registrar el error si es necesario
+            }
+        }
+        // Continuar con el siguiente filtro en la cadena
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+}

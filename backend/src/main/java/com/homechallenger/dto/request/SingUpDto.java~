@@ -1,0 +1,17 @@
+package com.homechallenger.dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+@Data
+public class SingUpDto {
+    @NotBlank(message = "identifier is required")
+    private String identifier;
+    @NotBlank(message = "cordinates is required")
+    private String cordinates;
+    @NotBlank(message = "name is required")
+    private String name;
+    @NotBlank(message = "last name is required")
+    private String lastName;
+    
+}
