@@ -28,8 +28,8 @@ public class WebSecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/auth/**").permitAll() // Acceso público
-                        .requestMatchers("/admin/**").permitAll() // Solo ADMIN
+                        .requestMatchers("/auth/**","/swagger-ui/**").permitAll() // Acceso público
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // Solo ADMIN
                         .requestMatchers("/user/**").hasRole("USER")  // Solo USER
                         .anyRequest().authenticated() // Resto de las rutas necesitan autenticación
                 )

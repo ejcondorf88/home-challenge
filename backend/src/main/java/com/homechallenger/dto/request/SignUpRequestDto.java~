@@ -24,6 +24,7 @@ public class SignUpRequestDto {
     @NotBlank(message = "El correo electrónico es obligatorio")
     private String email;
 
+    @NotBlank(message = "El rol es obligatorio")
     private Role rol;
 
     public String getIdentification() {
@@ -74,5 +75,5 @@ public class SignUpRequestDto {
         this.rol = rol;
     }
 
-    
+
 }

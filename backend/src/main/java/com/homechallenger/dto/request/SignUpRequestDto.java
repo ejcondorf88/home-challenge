@@ -3,6 +3,7 @@ package com.homechallenger.dto.request;
 import com.homechallenger.domain.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class SignUpRequestDto {
@@ -24,6 +25,7 @@ public class SignUpRequestDto {
     @NotBlank(message = "El correo electrónico es obligatorio")
     private String email;
 
+    @NotNull(message = "El rol es obligatorio")
     private Role rol;
 
     public String getIdentification() {

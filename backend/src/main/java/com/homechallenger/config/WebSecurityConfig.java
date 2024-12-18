@@ -28,7 +28,7 @@ public class WebSecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/auth/**").permitAll() // Acceso público
+                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()  // Permitir acceso público a Swagger
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Solo ADMIN
                         .requestMatchers("/user/**").hasRole("USER")  // Solo USER
                         .anyRequest().authenticated() // Resto de las rutas necesitan autenticación

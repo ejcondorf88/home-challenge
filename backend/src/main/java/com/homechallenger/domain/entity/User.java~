@@ -142,7 +142,8 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user")
+    @JoinColumn(name = "zone_id")
     private Zone zone;
 
     @PrePersist
