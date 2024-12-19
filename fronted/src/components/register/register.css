@@ -1,0 +1,106 @@
+/* Contenedor general del formulario */
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Asegura que ocupe toda la pantalla */
+    background-color: #f3f4f6; /* Fondo gris claro */
+    padding: 0 1rem;
+  }
+  
+  /* Estilo para el card que contiene el formulario */
+  .form .p-card {
+    width: 100%;
+    max-width: 40rem; /* Aumentado el ancho máximo */
+    background-color: #ffffff; /* Fondo blanco para el card */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 2rem;
+  }
+  
+  /* Estilo para el título */
+  .form .p-card h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333333; /* Color de texto oscuro */
+    margin-bottom: 1rem;
+  }
+  
+  /* Estilo para el error de mensaje */
+  .form .p-message {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Espaciado entre los inputs y campos */
+  .form form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Estilo para los inputs del formulario */
+  .form .p-inputtext,
+  .form .p-dropdown {
+    font-size: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ddd; /* Borde suave */
+  }
+  
+  /* Estilo para los botones */
+  .form .p-button {
+    border-radius: 8px; /* Bordes redondeados en botones */
+    padding: 0.75rem;
+    background-color: #4f46e5; /* Color de fondo del botón */
+    color: #ffffff; /* Color de texto blanco */
+    font-size: 1rem;
+  }
+  
+  .form .p-button:hover {
+    background-color: #4338ca; /* Color de fondo más oscuro al pasar el ratón */
+  }
+  
+  .form .p-button:active {
+    background-color: #3730a3; /* Color de fondo más oscuro al hacer clic */
+  }
+  
+  /* Estilo del enlace para iniciar sesión */
+  .form p {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #4b5563;
+  }
+  
+  .form p a {
+    font-weight: 500;
+    color: #4f46e5;
+    text-decoration: none;
+  }
+  
+  .form p a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Estilo para los iconos en los campos */
+  .form .p-inputtext i,
+  .form .p-dropdown i {
+    margin-right: 0.5rem; /* Espacio entre el icono y el texto */
+  }
+  
+  /* Estilo para los campos con errores */
+  .form .p-inputtext.p-invalid,
+  .form .p-dropdown.p-invalid {
+    border-color: #f87171; /* Borde rojo para campos con errores */
+  }
+  
+  .form .p-inputtext.p-invalid:focus,
+  .form .p-dropdown.p-invalid:focus {
+    border-color: #e11d48; /* Borde más oscuro al enfocar el campo con error */
+  }
+  
+  /* Estilo para los botones de carga */
+  .form .p-button[loading] {
+    background-color: #9ca3af; /* Color de fondo mientras carga */
+    cursor: not-allowed;
+  }
+  
