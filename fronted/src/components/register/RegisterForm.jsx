@@ -60,9 +60,11 @@ export const RegisterForm = () => {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
 
     const validationErrors = validateForm(formData);
     if (Object.keys(validationErrors).length > 0) {
+      console.log(validationErrors);
       setErrors(validationErrors);
       return;
     }

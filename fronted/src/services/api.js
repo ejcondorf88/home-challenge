@@ -9,7 +9,6 @@ export const registerUser = async (userData) => {
         "Content-Type": "application/json",
       },
     });
-
     return response.data;
   } catch (error) {
     // Manejo del error
