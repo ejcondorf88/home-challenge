@@ -49,6 +49,7 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String accessToken = tokenProvider.createToken(authentication);
         UserResponseDto userResponseDto = userDtoMapper.toUserResponseDto(userRepository.findByUsername(singUpDto.getUsername()).orElseThrow());
+        userResponseDto.setRol(userRepository.findByUsername(singUpDto.getUsername()).orElseThrow().getRole());
         return userDtoMapper.toAuthResponseDto(accessToken,userResponseDto);
     }
     @Transactional

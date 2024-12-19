@@ -1,4 +1,5 @@
 package com.homechallenger.service;
+import com.homechallenger.dto.request.UserRequestDto;
 import org.apache.commons.lang3.RandomStringUtils;
 import com.homechallenger.domain.entity.User;
 import com.homechallenger.domain.enums.Role;
@@ -48,6 +49,7 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String accessToken = tokenProvider.createToken(authentication);
         UserResponseDto userResponseDto = userDtoMapper.toUserResponseDto(userRepository.findByUsername(singUpDto.getUsername()).orElseThrow());
+        userResponseDto.setRol(singUpDto.getRol());
         return userDtoMapper.toAuthResponseDto(accessToken,userResponseDto);
     }
     @Transactional
@@ -103,6 +105,20 @@ public class UserService {
 
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
+    }
+
+    public UserResponseDto getUserById(Integer id) {
+        User user = userRepository.findById(id).orElseThrow();
+        return userDtoMapper.toUserResponseDto(user);
+    }
+
+    public UserResponseDto updateUser(Integer id, UserRequestDto userRequestDto) {
+        User user = userRepository.findById(id).orElseThrow();
+        user.setName(userRequestDto.getName());
+        user.setLastName(userRequestDto.getLastName());
+        user.setEmail(userRequestDto.getEmail());
+        User updatedUser = userRepository.save(user);
+        return userDtoMapper.toUserResponseDto(updatedUser);
     }
 
 
