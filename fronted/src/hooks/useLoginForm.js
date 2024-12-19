@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { loginUser } from "../services/auth";
+import { useNavigate } from "react-router-dom";
 import { validateForm, validateLoginForm } from "../utils/validate";
 
 export const useLoginForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     userName: "",
     password: "",
@@ -40,9 +42,7 @@ export const useLoginForm = () => {
     setIsLoading(true);
     try {
       const response = await loginUser(formData.userName, formData.password);
-      console.log(response);
-      // Handle successful login (e.g., store token, redirect)
-      //window.location.href = "/dashboard";
+      response.rol === "ADMIN" ? navigate("/admin") : navigate("/dashboard");
     } catch (error) {
       setErrors((prev) => ({
         ...prev,

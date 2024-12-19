@@ -72,6 +72,7 @@ export const RegisterForm = () => {
     setIsLoading(true);
     try {
       const response = await registerUser(formData);
+      localStorage.setItem('coordenadasDomicilio', formData.coordenadasDomicilio);
       const dialogMessage = `Necesitas guardar el username: ${response.username} y la contraseña: ${response.password} para poder iniciar sesión e ingresar. guardalos bien!`;
 
       setDialogMessage(dialogMessage); 
