@@ -1,10 +1,5 @@
-/* Asegúrate de que el contenedor principal tenga estas propiedades */
 .App {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
-    margin: 0;
-    background-color: #f5f5f5; /* Fondo opcional */
-  }
-  
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}

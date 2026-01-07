@@ -1,0 +1,82 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-header h2 {
+  margin: 0 0 0.5rem 0;
+  color: #1f2937;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.login-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.login-message {
+  margin-bottom: 1.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.login-options {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.forgot-password {
+  color: #4f46e5;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.forgot-password:hover {
+  color: #4338ca;
+}
+
+.login-button {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.signup-link {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+.signup-link a {
+  font-weight: 500;
+  color: #4f46e5;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.signup-link a:hover {
+  color: #4338ca;
+}
+
