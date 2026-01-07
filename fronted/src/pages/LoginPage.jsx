@@ -1,11 +1,13 @@
+import { Link } from 'react-router-dom';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
-import { User, Lock } from 'lucide-react'; // Cambiar el ícono a User para username
-import { InputField } from '../forms/InputField';
-import { useLoginForm } from '../../hooks/useLoginForm';
+import { User, Lock } from 'lucide-react';
+import { InputField } from '../components/forms/InputField';
+import { useLoginForm } from '../hooks/useLoginForm';
+import './LoginPage.css';
 
-export const LoginForm = () => {
+export const LoginPage = () => {
     const { 
         formData, 
         errors, 
@@ -15,7 +17,7 @@ export const LoginForm = () => {
     } = useLoginForm();
 
     return (
-        <div className="login-container">
+        <div className="login-page">
             <Card className="login-card">
                 <div className="login-header">
                     <h2>Welcome Back</h2>
@@ -36,8 +38,8 @@ export const LoginForm = () => {
                         label="userName"
                         value={formData.userName}
                         onChange={handleChange}
-                        error={errors.userName} // Cambiar errors.email a errors.username
-                        icon={<User size={20} />} // Ícono de usuario
+                        error={errors.userName}
+                        icon={<User size={20} />}
                         type="text"
                         placeholder="Enter your username"
                     />
@@ -69,10 +71,11 @@ export const LoginForm = () => {
 
                     <p className="signup-link">
                         Don't have an account?{' '}
-                        <a href="/register">Create one now</a>
+                        <Link to="/">Create one now</Link>
                     </p>
                 </form>
             </Card>
         </div>
     );
 };
+
