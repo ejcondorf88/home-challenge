@@ -1,7 +1,16 @@
-resource "aws_ec2_host" "example" {
+//PARA CREAR UNA INSTANCIA EC2 NECESITAMOS:
+//GRAR UN KEY PAIR Y ASIGNARLO A LA INSTANCIA
+//GRUPO DE SEGURIDAD QUE PERMITA EL TRÁFICO SSH (PUERTO 22) Y HTTP (PUERTO 80)
+// AMI DE AMAZON LINUX 2
+//TIPO DE INSTANCIA t2.micro
+//KEY PAIR
+//ARCHIVO DE ARRAQNQUE PARA INSTALAR NGNIX Y DOCKER
+//ASIGNAR UNA IP ELÁSTICA A LA INSTANCIA
+//ELB PARA DISTRIBUIR EL TRÁFICO
+resource "aws_ec2_host" "softka-host" {
   availability_zone = "us-west-2a"
   instance_type     = "m5.large"
     tags = {
-        Name = "example-host"
+        Name = "softka-host"
     }
 }
