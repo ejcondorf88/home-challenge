@@ -1,4 +1,0 @@
-package com.homechallenger.exception;
-
-public class BadRequestException {
-}
