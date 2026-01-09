@@ -1,0 +1,28 @@
+# ============================
+# Fase 1: Compilación con Maven
+# ============================
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+
+# Definir directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de Maven
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+# ============================
+# Fase 2: Imagen final
+# ============================
+FROM eclipse-temurin:17-jre
+
+# Definir directorio de trabajo
+WORKDIR /app
+
+# Copiar el JAR generado desde la fase de build
+COPY --from=build /app/target/*.jar app.jar
+
+# Comando de ejecución
+ENTRYPOINT ["java", "-jar", "app.jar"]
+#Cambiar el nombre del archivo DockerFile a Dockerfile
