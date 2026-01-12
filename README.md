@@ -123,68 +123,149 @@ Este repositorio contiene la implementación del **Kanteritas Kruger Challenge**
     ```json
     [
       {
-        "id": "integer",
-        "name": "string",
-        "openingTime": "string",
-        "closingTime": "string",
-        "coordinates": "string",
-        "user": {
-          "id": "integer",
-          "username": "string",
-          "email": "string",
-          "name": "string",
-          "lastName": "string",
-          "rol": "ENUM_ROLE"
-        }
-      }
-    ]
-    ```
+        # Home Challenger — Proyecto
 
-- **🔍 Obtener Zona por ID**
-  - **GET** `/api/zones/{id}`
-  - **Respuesta**:
-    ```json
-    {
-      "id": "integer",
-      "name": "string",
-      "openingTime": "string",
-      "closingTime": "string",
-      "coordinates": "string",
-      "user": {
-        "id": "integer",
-        "username": "string",
-        "email": "string",
-        "name": "string",
-        "lastName": "string",
-        "rol": "ENUM_ROLE"
-      }
-    }
-    ```
+        Proyecto de ejemplo que contiene una API en Java (Spring Boot), un frontend en React (Vite) y configuración de infraestructura con Terraform.
 
-- **➕ Crear Nueva Zona**
-  - **POST** `/api/zones`
-  - **Body**:
-    ```json
-    {
-      "name": "string",
-      "openingTime": "string",
-      "closingTime": "string",
-      "coordinates": "string"
-    }
-    ```
+        ## Estructura del repositorio
 
-- **✏️ Actualizar Zona**
-  - **PUT** `/api/zones/{id}`
-  - **Body**:
-    ```json
-    {
-      "name": "string",
-      "openingTime": "string",
-      "closingTime": "string",
-      "coordinates": "string"
-    }
-    ```
+        - `backend/` — API Spring Boot (Java 17, Maven)
+        - `fronted/` — Frontend con React + Vite
+        - `infra/` — Terraform y scripts de despliegue
 
-- **❌ Eliminar Zona**
-  - **DELETE** `/api/zones/{id}`
+        ## Tecnologías
+
+        - Backend: Spring Boot, Spring Security (JWT), Spring Data JPA, PostgreSQL, Maven
+        - Frontend: React, Vite, PrimeReact, Leaflet
+        - Infra: Terraform (AWS), Docker
+
+        ## Quickstart — desarrollo local
+
+        1) Backend (desde la carpeta raíz):
+
+        ```bash
+        cd backend
+        mvn clean package
+        mvn spring-boot:run
+        ```
+
+        La API por defecto escucha en el puerto `8080`. Endpoints de autenticación expuestos en `/auth`.
+
+        2) Frontend (desarrollo):
+
+        ```bash
+        cd fronted
+        npm install
+        npm run dev
+        ```
+
+        Accede a la app en `http://localhost:5173` (o el puerto que indique Vite).
+
+        3) Ejecutar con Docker (opcional)
+
+        Backend (build y run):
+
+        ```bash
+        docker build -f backend/docker/DockerFile -t home-challenge-backend:latest ./backend
+        docker run -p 8080:8080 home-challenge-backend:latest
+        ```
+
+        Frontend (build y run):
+
+        ```bash
+        docker build -f fronted/docker/Dockerfile -t home-challenge-frontend:latest ./fronted
+        docker run -p 80:80 home-challenge-frontend:latest
+        ```
+
+        4) Infra (Terraform) — revisión/ejecución:
+
+        ```bash
+        cd infra
+        terraform init
+        terraform plan
+        terraform apply
+        ```
+
+        ## Notas importantes y problemas conocidos
+
+        - API URL en frontend: `fronted/src/services/api.js` usa `http://localhost:8080/api/v1/auth` mientras que el backend expone `/auth`. Esto rompe autentificación. Recomendación: actualizar `API_URL` a `http://localhost:8080/auth` o cambiar rutas del backend para mantener prefijo `/api/v1`.
+        - Dependencia duplicada: `spring-boot-starter-security` aparece dos veces en `backend/pom.xml`. Eliminar la duplicación.
+        - React está en versión RC en `fronted/package.json` (React 19 RC). Recomiendo fijar a una versión estable (ej. `^18.2.0`) para producción.
+        - Terraform/Seguridad: el security group en `infra/main.tf` permite SSH (22) desde `0.0.0.0/0`. Restringir a rangos conocidos o usar bastion.
+        - AMI hardcoded en `infra/main.tf`; parametrizar por región y/o variable.
+
+        ## Endpoints principales
+
+        - `POST /auth/login` — login
+        - `POST /auth/signup` — registro
+        - Resto de endpoints bajo `/user`, `/admin`, `/zones` según controladores en `backend/src/main/java/com/homechallenger/controller`.
+
+        ## Recomendaciones rápidas (prioritarias)
+
+        1. Corregir `fronted/src/services/api.js` para apuntar al endpoint correcto.
+        2. Eliminar dependencia duplicada en `backend/pom.xml`.
+        3. Restringir reglas de SSH en `infra/main.tf` y parametrizar AMI.
+        4. Fijar React a versión estable en `fronted/package.json`.
+
+        ## ¿Quieres que aplique estas correcciones ahora?
+
+        Si quieres, puedo:
+
+        - Corregir `fronted/src/services/api.js` (cambio inmediato)
+        - Actualizar `backend/pom.xml` para eliminar duplicado
+        - Sugerir cambios en `infra/main.tf` (ejemplo de seguridad)
+
+        Indica cuáles aplico y procedo.
+
+        ## Infra — Terraform y arquitectura (para prueba técnica)
+
+        Objetivo: describir una arquitectura reproducible, segura y adecuada para una prueba técnica, y dar pasos/variables claras para desplegar.
+
+        - Arquitectura propuesta (mínimo viable para la prueba):
+          - VPC con subredes públicas y privadas.
+          - Load Balancer público (ALB) en subredes públicas, que dirija tráfico a Servicios en subredes privadas.
+          - Backend desplegado en ECS Fargate (o Auto Scaling Group de EC2) con imagen Docker; frontend servido por S3+CloudFront o Nginx en contenedor detrás del ALB.
+          - Base de datos gestionada (RDS PostgreSQL) en subredes privadas o usar Supabase como servicio gestionado.
+          - Secrets en AWS Secrets Manager o Parameter Store; no almacenar secretos en Terraform state sin cifrado.
+
+        - Seguridad y buenas prácticas:
+          - No permitir SSH desde `0.0.0.0/0`. Usar IPs permitidas o SSM Session Manager para acceso remoto.
+          - Restringir IAM a principios de mínimo privilegio; usar roles por servicio (task role, instance profile, etc.).
+          - Habilitar HTTPS en ALB (certificado ACM) y redirigir HTTP a HTTPS.
+          - Logs y métricas: CloudWatch (aplicación + ALB + RDS). Añadir alertas básicas.
+
+        - Estructura de Terraform recomendada (repositorio):
+          - `infra/modules/` — módulos reutilizables (vpc, ecs, rds, alb, security-group)
+          - `infra/envs/dev/` `infra/envs/prod/` — stacks por entorno que consumen módulos
+          - `infra/scripts/` — helpers para `terraform fmt`/`validate`/`workspace`
+
+        - Variables útiles (ejemplo mínimo para `infra/terraform.tfvars`):
+          - `region = "us-west-1"`
+          - `environment = "dev"`
+          - `vpc_cidr = "10.0.0.0/16"`
+          - `allowed_ssh_cidr = "YOUR_IP/32"`
+          - `ami = "ami-..."` (parametrizar por región)
+
+        - Comandos rápidos:
+
+        ```bash
+        cd infra
+        terraform init
+        terraform plan -var-file=terraform.tfvars
+        terraform apply -var-file=terraform.tfvars
+        ```
+
+        - CI/CD recomendado para prueba técnica:
+          - Pipeline en GitHub Actions / GitLab CI que haga:
+            1. Lint y tests para backend y frontend.
+            2. Build de imágenes Docker y push a registry (ECR/DockerHub).
+            3. Run `terraform fmt`/`validate` and `terraform plan` (en entorno de PR).
+            4. (manual) `terraform apply` en `main` o `prod` con `approval`.
+
+        - Outputs y validaciones esperadas tras `apply`:
+          - URL pública del ALB / CloudFront.
+          - Endpoint de base de datos (si aplica), nombre del cluster/servicio.
+          - ARN del role de ejecución y ubicación del bucket para artefactos.
+
+        Notas finales: si quieres, puedo preparar una propuesta de `infra/` con módulos mínimos (VPC + ALB + ECS Fargate + RDS) y un ejemplo de pipeline CI (GitHub Actions) lista para ejecutar en la prueba técnica.
 
