@@ -4,7 +4,8 @@ import com.homechallenger.dto.request.AuthRequestDto;
 import com.homechallenger.dto.request.SignUpRequestDto;
 import com.homechallenger.dto.response.AuthResponseDto;
 import com.homechallenger.dto.response.UserResponseDto;
-import com.homechallenger.service.UserService;
+import com.homechallenger.service.UserInterface;
+import com.homechallenger.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private UserService userService;
+    private UserInterface userService;
     @Autowired
     public AuthController(UserService userService) {
         this.userService = userService;

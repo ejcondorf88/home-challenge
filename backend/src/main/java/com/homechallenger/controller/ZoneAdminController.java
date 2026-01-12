@@ -2,7 +2,8 @@ package com.homechallenger.controller;
 
 import com.homechallenger.dto.request.ZoneRequestDto;
 import com.homechallenger.dto.response.ZoneResponseDto;
-import com.homechallenger.service.ZoneService;
+import com.homechallenger.service.ZoneServiceInterface;
+import com.homechallenger.service.impl.ZoneService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/zones")
 public class ZoneAdminController {
-    private final ZoneService zoneService;
+    private final ZoneServiceInterface zoneService;
 
     public ZoneAdminController(ZoneService zoneService) {
         this.zoneService = zoneService;

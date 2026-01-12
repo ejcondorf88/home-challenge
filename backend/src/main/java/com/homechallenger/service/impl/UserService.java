@@ -1,8 +1,8 @@
-package com.homechallenger.service;
+package com.homechallenger.service.impl;
 import com.homechallenger.dto.request.UserRequestDto;
+import com.homechallenger.service.UserInterface;
 import org.apache.commons.lang3.RandomStringUtils;
 import com.homechallenger.domain.entity.User;
-import com.homechallenger.domain.enums.Role;
 import com.homechallenger.dto.request.AuthRequestDto;
 import com.homechallenger.dto.request.SignUpRequestDto;
 import com.homechallenger.dto.response.AuthResponseDto;
@@ -10,7 +10,6 @@ import com.homechallenger.dto.response.UserResponseDto;
 import com.homechallenger.exception.BadRequestException;
 import com.homechallenger.mapper.UserDtoMapper;
 import com.homechallenger.repository.UserRepository;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService  implements UserInterface {
     private  final  UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserDtoMapper userDtoMapper;

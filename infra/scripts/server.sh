@@ -21,3 +21,15 @@ docker container run -d -p 8080:8080 --name backend ejcondorf88/backend:1.4.0
 docker network create fronted-backend-network
 docker network connect fronted-backend-network fronted
 docker network connect fronted-backend-network backend
+
+docker volume create portainer_data
+
+
+docker run -d \
+  -p 9000:9000 \
+  -p 9443:9443 \
+  --name portainer \
+  --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce:latest
