@@ -10,7 +10,7 @@ variable "key_pair_name" {
 variable "ami_id" {
   description = "AMI de Amazon Linux"
   type        = string
-  default     = "ami-0c5204531f799e0c6"
+  default     = "ami-07ff62358b87c7116" // Amazon Linux 3 AMI en us-west-1
 }
 
 variable "instance_name" {

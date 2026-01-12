@@ -1,20 +1,24 @@
 #!/bin/bash
+set -e
 
-# Actualizar el sistema
-sudo dnf update -y
+# Actualizar sistema
+dnf update -y
 
 # Instalar Nginx
-sudo dnf install -y nginx
-sudo systemctl start nginx
-sudo systemctl enable nginx
+dnf install -y nginx
+systemctl start nginx
+systemctl enable nginx
 
 # Instalar Git
-sudo dnf install -y git
+dnf install -y git
 
 # Instalar Docker
-sudo dnf install -y docker
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo su 
-# Agregar el usuario actual al grupo docker
+dnf install -y docker
+systemctl start docker
+systemctl enable docker
 
+# Agregar ec2-user al grupo docker
+usermod -aG docker ec2-user
+
+# Permisos correctos
+newgrp docker || true
