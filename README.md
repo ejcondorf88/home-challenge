@@ -607,6 +607,18 @@ La documentación interactiva de la API está disponible en:
 
 Este proyecto es parte de un challenge técnico.
 
+### 📊 Diagrama de Arquitectura
+
+Se adjunta el diagrama de arquitectura y flujo de la aplicación:
+
+**[Ver Diagrama en Excalidraw](https://excalidraw.com/#json=IPclu_rT66EuGYMAOkmSr,qkaxXx7xL1V7QvVCPlnsHw)**
+
+El diagrama incluye:
+- Flujo de datos entre componentes
+- Arquitectura de capas del sistema
+- Interacción entre Frontend, Backend y Base de Datos
+- Infraestructura de despliegue en AWS
+
 ---
 
 ## 👤 Autor
@@ -616,4 +628,3 @@ Este proyecto es parte de un challenge técnico.
 - GitHub: [@ejcondorf88](https://github.com/ejcondorf88)
 
 ---
-
