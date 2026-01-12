@@ -4,11 +4,6 @@ set -e
 # Actualizar sistema
 dnf update -y
 
-# Instalar Nginx
-dnf install -y nginx
-systemctl start nginx
-systemctl enable nginx
-
 # Instalar Git
 dnf install -y git
 
@@ -20,5 +15,9 @@ systemctl enable docker
 # Agregar ec2-user al grupo docker
 usermod -aG docker ec2-user
 
-# Permisos correctos
-newgrp docker || true
+# Ejecutar contenedor (ahora Docker puede usar el puerto 80)
+docker container run -d -p 80:80 --name fronted ejcondorf88/fronted:1.4.0
+docker container run -d -p 8080:8080 --name backend ejcondorf88/backend:1.4.0
+docker network create fronted-backend-network
+docker network connect fronted-backend-network fronted
+docker network connect fronted-backend-network backend

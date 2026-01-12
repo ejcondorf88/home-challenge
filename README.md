@@ -269,3 +269,14 @@ Este repositorio contiene la implementación del **Kanteritas Kruger Challenge**
 
         Notas finales: si quieres, puedo preparar una propuesta de `infra/` con módulos mínimos (VPC + ALB + ECS Fargate + RDS) y un ejemplo de pipeline CI (GitHub Actions) lista para ejecutar en la prueba técnica.
 
+
+docker build -t ejcondorf88/fronted:1.4.0 --no-cache -f fronted\docker\Dockerfile .
+docker push ejcondorf88/fronted:1.4.0 
+
+
+docker build -t ejcondorf88/backend:1.4.0 --no-cache -f backend\docker\Dockerfile .
+docker push ejcondorf88/backend:1.4.0
+
+
+
+https://excalidraw.com/#json=HX2_8_Qp7GUkgmAbRNFp0,TMPO73YZQXBncnehG2F3AA
