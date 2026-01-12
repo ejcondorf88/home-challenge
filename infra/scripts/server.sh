@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+
+# Actualizar sistema
+dnf update -y
+
+# Instalar Git
+dnf install -y git
+
+# Instalar Docker
+dnf install -y docker
+systemctl start docker
+systemctl enable docker
+
+# Agregar ec2-user al grupo docker
+usermod -aG docker ec2-user
+
+# Ejecutar contenedor (ahora Docker puede usar el puerto 80)
+docker container run -d -p 80:80 --name fronted ejcondorf88/fronted:1.4.0
+docker container run -d -p 8080:8080 --name backend ejcondorf88/backend:1.4.0
+docker network create fronted-backend-network
+docker network connect fronted-backend-network fronted
+docker network connect fronted-backend-network backend
