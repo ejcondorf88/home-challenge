@@ -1,282 +1,619 @@
-# Kanteritas Kruger Challenge
+# 🏠 Home Challenger — Sistema de Gestión de Usuarios y Zonas
 
-Este repositorio contiene la implementación del **Kanteritas Kruger Challenge**, un sistema diseñado para gestionar clientes y programar interrupciones en los sectores. La aplicación incluye dos roles: **Administrador** y **Cliente**, con funcionalidades específicas para cada uno.
+Sistema completo para gestionar usuarios y zonas geográficas con roles de administrador y cliente. La aplicación permite gestionar usuarios, asignar zonas geográficas y programar interrupciones de servicio por sector.
+
+---
+
+## 📋 Tabla de Contenidos
+
+- [Características](#-características-principales)
+- [Tecnologías](#️-tecnologías-utilizadas)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Prerrequisitos](#-prerrequisitos)
+- [Instalación y Configuración](#️-instalación-y-configuración)
+- [Ejecución Local](#-ejecución-local)
+- [Ejecución con Docker](#-ejecución-con-docker)
+- [API Endpoints](#-api-rest-endpoints)
+- [Base de Datos](#-base-de-datos)
+- [Infraestructura](#-infraestructura-con-terraform)
+- [Variables de Entorno](#-variables-de-entorno)
+- [Documentación API](#-documentación-api)
+- [Troubleshooting](#-troubleshooting)
+
+---
+
+## 🌟 Características Principales
+
+- **Sistema de Autenticación**: Login y registro de usuarios con JWT
+- **Gestión de Usuarios**: CRUD completo para administradores
+- **Gestión de Zonas**: Creación y administración de zonas geográficas con coordenadas
+- **Roles de Usuario**:
+  - **ADMIN**: Gestión completa de usuarios y zonas
+  - **USER**: Visualización de información personal y zonas asignadas
+- **Seguridad**: Autenticación y autorización con Spring Security y JWT
+- **API REST**: Documentación con Swagger/OpenAPI
+- **Frontend Moderno**: Interfaz React con PrimeReact y mapas interactivos (Leaflet)
+- **Infraestructura como Código**: Despliegue automatizado con Terraform en AWS
 
 ---
 
 ## 🛠️ Tecnologías Utilizadas
 
 ### Backend
-- **Spring Boot**: Framework de Java para el desarrollo de la API REST.
-- **Supabase**: Base de datos en la nube basada en **PostgreSQL**.
-- **Spring Data JPA**: Abstracción para trabajar con bases de datos relacionales.
-- **Spring Security**: Autenticación y autorización de usuarios.
-- **Lombok**: Simplificación del código con anotaciones Java.
-- **Maven**: Herramienta para gestionar dependencias y construir el proyecto.
+- **Java 17**: Lenguaje de programación
+- **Spring Boot 3.3.6**: Framework de desarrollo
+- **Spring Security**: Autenticación y autorización
+- **Spring Data JPA**: Persistencia de datos
+- **PostgreSQL**: Base de datos relacional
+- **JWT (JSON Web Tokens)**: Autenticación stateless
+- **Maven**: Gestión de dependencias y construcción
+- **Lombok**: Reducción de código boilerplate
+- **ModelMapper**: Mapeo de objetos DTO
+- **SpringDoc OpenAPI**: Documentación de API
 
 ### Frontend
-- **React**: Biblioteca para construir interfaces de usuario dinámicas.
-- **Vite**: Herramienta de desarrollo rápida y ligera.
-- **PrimeReact**: Componentes de UI estilizados para React.
-- **CSS**: Estilización de la aplicación.
+- **React 19**: Biblioteca de UI
+- **Vite 6**: Build tool y dev server
+- **PrimeReact**: Componentes de UI
+- **React Router DOM**: Navegación
+- **Leaflet**: Mapas interactivos
+- **Axios**: Cliente HTTP
+- **ESLint**: Linter de código
+
+### Infraestructura
+- **Terraform**: Infraestructura como código
+- **AWS EC2**: Servidores virtuales
+- **Docker**: Contenedores
+- **Nginx**: Servidor web para frontend
+- **Maven**: Build del backend
 
 ---
 
-## 🌟 Características Principales
+## 📁 Estructura del Proyecto
 
-- **Roles de Usuario**:
-  - **Administrador**: Gestión de usuarios, asignación de zonas y programación de interrupciones(En desarrollo la parte del fronted).
-  - **Cliente**: Visualización de interrupciones programadas y detalles personales.
-- **Base de datos en la nube**: Uso de **Supabase** para almacenar información de usuarios, roles, zonas y registros de interrupciones.
-- **Seguridad**:
-  - Autenticación y autorización robusta con **JWT (JSON Web Tokens)**.
+```
+home-challenge/
+├── backend/                    # API Spring Boot
+│   ├── docker/
+│   │   └── Dockerfile         # Imagen Docker del backend
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/homechallenger/
+│   │   │   │   ├── config/    # Configuraciones (CORS, Security, etc.)
+│   │   │   │   ├── controller/ # Controladores REST
+│   │   │   │   ├── domain/    # Entidades y enums
+│   │   │   │   ├── dto/       # Data Transfer Objects
+│   │   │   │   ├── exception/ # Manejo de excepciones
+│   │   │   │   ├── mapper/    # Mappers DTO ↔ Entity
+│   │   │   │   ├── repository/ # Repositorios JPA
+│   │   │   │   ├── security/  # JWT y seguridad
+│   │   │   │   └── service/   # Lógica de negocio
+│   │   │   └── resources/
+│   │   │       └── application.properties
+│   │   └── test/              # Tests unitarios
+│   └── pom.xml                # Dependencias Maven
+│
+├── fronted/                   # Frontend React
+│   ├── docker/
+│   │   └── Dockerfile         # Imagen Docker del frontend
+│   ├── src/
+│   │   ├── components/        # Componentes React
+│   │   │   ├── forms/         # Formularios
+│   │   │   └── map/           # Componentes de mapas
+│   │   ├── hooks/             # Custom hooks
+│   │   ├── pages/             # Páginas de la aplicación
+│   │   ├── services/          # Servicios API
+│   │   └── utils/             # Utilidades
+│   ├── package.json
+│   └── vite.config.js
+│
+└── infra/                     # Infraestructura Terraform
+    ├── main.tf                # Recursos principales
+    ├── variables.tf            # Variables de Terraform
+    ├── output.tf              # Outputs de Terraform
+    ├── provider.tf            # Configuración del provider
+    └── scripts/
+        └── server.sh          # Script de arranque EC2
+```
 
 ---
 
-## ⚙️ Configuración y Ejecución del Proyecto
+## 📦 Prerrequisitos
 
-### 🖥️ Prerrequisitos
-- **Java 17** o superior.
-- **Node.js** (versión 16+).
-- **Maven** o **Gradle** instalado.
-- **Supabase** configurado con las tablas necesarias:
-  - Usuarios.
-  - Roles.
-  - Zonas.
-  
+Antes de comenzar, asegúrate de tener instalado:
 
-### 📦 Backend (Spring Boot)
+- **Java 17** o superior ([Descargar](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html))
+- **Node.js 16+** y npm/yarn ([Descargar](https://nodejs.org/))
+- **Maven 3.6+** ([Descargar](https://maven.apache.org/download.cgi))
+- **PostgreSQL 12+** o acceso a una base de datos PostgreSQL/Supabase
+- **Docker** (opcional, para ejecución con contenedores)
+- **Terraform** (opcional, para infraestructura)
 
-1. Clonar el repositorio:
+---
+
+## ⚙️ Instalación y Configuración
+
+### 1. Clonar el Repositorio
+
+```bash
+git clone https://github.com/ejcondorf88/home-challenge.git
+cd home-challenge
+```
+
+### 2. Configurar Base de Datos
+
+Crea una base de datos PostgreSQL (puedes usar Supabase o una instancia local):
+
+```sql
+CREATE DATABASE home_challenger;
+```
+
+### 3. Configurar Variables de Entorno del Backend
+
+Edita `backend/src/main/resources/application.properties` o configura las siguientes variables de entorno:
+
+```properties
+# Base de datos
+DATABASE_URL=jdbc:postgresql://localhost:5432/home_challenger
+USER=tu_usuario_postgres
+PASSWORD=tu_contraseña_postgres
+
+# JWT
+SECRET=tu_clave_secreta_jwt_muy_segura_y_larga
+```
+
+**Nota**: Para producción, usa variables de entorno en lugar de hardcodear valores en `application.properties`.
+
+---
+
+## 🚀 Ejecución Local
+
+### Backend (Spring Boot)
+
+1. Navegar al directorio del backend:
    ```bash
-   git clone https://github.com/ejcondorf88/home-challenge.git
-   cd home-challenge/backend
-# Configuración de la base de datos
-     spring.datasource.username=<USUARIO>
-     spring.datasource.password=<CONTRASEÑA>
-     spring.jpa.hibernate.ddl-auto=update
+   cd backend
+   ```
 
-     # Configuración de JWT
-     jwt.secret=<CLAVE_SECRETA_JWT>
-     ```
-
-3. Compilar y ejecutar el backend:
+2. Compilar el proyecto:
    ```bash
    mvn clean install
+   ```
+
+3. Ejecutar la aplicación:
+   ```bash
    mvn spring-boot:run
----
+   ```
 
-## 🔗 Configuración del Frontend (React con Vite)
+   La API estará disponible en: `http://localhost:8080/api/v1`
 
-1. Navegar a la carpeta del frontend:
+4. Acceder a la documentación Swagger:
+   ```
+   http://localhost:8080/api/v1/swagger-ui.html
+   ```
+
+### Frontend (React + Vite)
+
+1. Navegar al directorio del frontend:
    ```bash
    cd fronted
-2. Instalar las dependencias necesarias:
+   ```
+
+2. Instalar dependencias:
    ```bash
-   yarn add 
-# Estructura de Base de Datos
+   npm install
+   # o
+   yarn install
+   ```
 
-## Diagrama Entidad-Relación
-![image](https://github.com/user-attachments/assets/41070158-fdfe-40ec-aff4-e9cb0c4b5921)
-## Relaciones
+3. Ejecutar en modo desarrollo:
+   ```bash
+   npm run dev
+   # o
+   yarn dev
+   ```
 
-- **ENUM_ROLE ↔ USER**: 1:1 (Un usuario tiene un rol, rol único por usuario)
-- **USER ↔ ZONE**: 1:1 (Un usuario tiene una zona, zona única por usuario)
+   La aplicación estará disponible en: `http://localhost:5173`
+
+**Nota**: Asegúrate de que el backend esté corriendo antes de iniciar el frontend.
+
+---
+
+## 🐳 Ejecución con Docker
+
+### Backend
+
+1. Construir la imagen:
+   ```bash
+   docker build -t home-challenge-backend:latest -f backend/docker/Dockerfile ./backend
+   ```
+
+2. Ejecutar el contenedor:
+   ```bash
+   docker run -p 8080:8080 \
+     -e DATABASE_URL=jdbc:postgresql://host.docker.internal:5432/home_challenger \
+     -e USER=tu_usuario \
+     -e PASSWORD=tu_contraseña \
+     -e SECRET=tu_clave_secreta \
+     home-challenge-backend:latest
+   ```
+
+### Frontend
+
+1. Construir la imagen:
+   ```bash
+   docker build -t home-challenge-frontend:latest -f fronted/docker/Dockerfile ./fronted
+   ```
+
+2. Ejecutar el contenedor:
+   ```bash
+   docker run -p 80:80 home-challenge-frontend:latest
+   ```
+
+### Docker Compose (Recomendado)
+
+Crea un archivo `docker-compose.yml` en la raíz del proyecto:
+
+```yaml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: home_challenger
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/home_challenger
+      USER: postgres
+      PASSWORD: postgres
+      SECRET: your-secret-key-here
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./fronted
+      dockerfile: docker/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+```
+
+Ejecutar:
+```bash
+docker-compose up -d
+```
+
+---
 
 ## 📚 API REST Endpoints
 
-### Autenticación y Usuarios
+La API está disponible bajo el prefijo `/api/v1`.
 
-- **📝 Iniciar Sesión**
-  - **POST** `/api/auth/login`
-  - **Body**:
-    ```json
-    {
-      "username": "string",
-      "password": "string"
-    }
-    ```
+### Autenticación
 
-- **👤 Registro de Usuario**
-  - **POST** `/api/auth/signup`
-  - **Body**:
-    ```json
-    {
-      "email": "string",
-      "name": "string",
-      "lastName": "string",
-      "rol": "ENUM_ROLE"
-    }
-    ```
+#### Login
+```http
+POST /api/v1/auth/login
+Content-Type: application/json
 
-- **📋 Gestión de Usuarios**
-  - **GET** `/api/users`: Obtener todos los usuarios
-  - **GET** `/api/users/{id}`: Obtener usuario por ID
-  - **PUT** `/api/users/{id}`: Actualizar usuario
-  - **DELETE** `/api/users/{id}`: Eliminar usuario
+{
+  "username": "usuario",
+  "password": "contraseña"
+}
+```
 
-### Gestión de Zonas
+**Respuesta:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "username": "usuario",
+    "email": "usuario@example.com",
+    "name": "Nombre",
+    "lastName": "Apellido",
+    "role": "ADMIN"
+  }
+}
+```
 
-- **📍 Obtener Todas las Zonas**
-  - **GET** `/api/zones`
-  - **Respuesta**:
-    ```json
-    [
-      {
-        # Home Challenger — Proyecto
+#### Registro
+```http
+POST /api/v1/auth/signup
+Content-Type: application/json
 
-        Proyecto de ejemplo que contiene una API en Java (Spring Boot), un frontend en React (Vite) y configuración de infraestructura con Terraform.
+{
+  "email": "nuevo@example.com",
+  "name": "Nombre",
+  "lastName": "Apellido",
+  "username": "nuevo_usuario",
+  "password": "contraseña_segura",
+  "identification": "1234567890",
+  "coordenadasDomicilio": "lat,lng",
+  "rol": "USER"
+}
+```
 
-        ## Estructura del repositorio
+### Gestión de Usuarios (Requiere autenticación ADMIN)
 
-        - `backend/` — API Spring Boot (Java 17, Maven)
-        - `fronted/` — Frontend con React + Vite
-        - `infra/` — Terraform y scripts de despliegue
+#### Obtener todos los usuarios
+```http
+GET /api/v1/admin/users
+Authorization: Bearer {token}
+```
 
-        ## Tecnologías
+#### Crear usuario
+```http
+POST /api/v1/admin/users
+Authorization: Bearer {token}
+Content-Type: application/json
 
-        - Backend: Spring Boot, Spring Security (JWT), Spring Data JPA, PostgreSQL, Maven
-        - Frontend: React, Vite, PrimeReact, Leaflet
-        - Infra: Terraform (AWS), Docker
+{
+  "email": "usuario@example.com",
+  "name": "Nombre",
+  "lastName": "Apellido",
+  "username": "usuario",
+  "password": "contraseña",
+  "identification": "1234567890",
+  "coordenadasDomicilio": "lat,lng",
+  "rol": "USER"
+}
+```
 
-        ## Quickstart — desarrollo local
+#### Actualizar usuario
+```http
+PUT /api/v1/admin/users/{id}
+Authorization: Bearer {token}
+Content-Type: application/json
 
-        1) Backend (desde la carpeta raíz):
+{
+  "name": "Nombre Actualizado",
+  "lastName": "Apellido Actualizado",
+  "email": "nuevo@example.com"
+}
+```
 
-        ```bash
-        cd backend
-        mvn clean package
-        mvn spring-boot:run
-        ```
+#### Eliminar usuario
+```http
+DELETE /api/v1/admin/users/{id}
+Authorization: Bearer {token}
+```
 
-        La API por defecto escucha en el puerto `8080`. Endpoints de autenticación expuestos en `/auth`.
+### Gestión de Zonas (Requiere autenticación ADMIN)
 
-        2) Frontend (desarrollo):
+#### Obtener todas las zonas
+```http
+GET /api/v1/admin/zones
+Authorization: Bearer {token}
+```
 
-        ```bash
-        cd fronted
-        npm install
-        npm run dev
-        ```
+#### Crear zona
+```http
+POST /api/v1/admin/zones
+Authorization: Bearer {token}
+Content-Type: application/json
 
-        Accede a la app en `http://localhost:5173` (o el puerto que indique Vite).
+{
+  "name": "Zona Norte",
+  "openingTime": "08:00:00",
+  "closingTime": "18:00:00",
+  "coordinates": "{\"lat\": -0.1807, \"lng\": -78.4678}",
+  "userId": 1
+}
+```
 
-        3) Ejecutar con Docker (opcional)
+#### Actualizar zona
+```http
+PUT /api/v1/admin/zones/{id}
+Authorization: Bearer {token}
+Content-Type: application/json
 
-        Backend (build y run):
+{
+  "name": "Zona Norte Actualizada",
+  "openingTime": "09:00:00",
+  "closingTime": "19:00:00"
+}
+```
 
-        ```bash
-        docker build -f backend/docker/DockerFile -t home-challenge-backend:latest ./backend
-        docker run -p 8080:8080 home-challenge-backend:latest
-        ```
+#### Eliminar zona
+```http
+DELETE /api/v1/admin/zones/{id}
+Authorization: Bearer {token}
+```
 
-        Frontend (build y run):
+---
 
-        ```bash
-        docker build -f fronted/docker/Dockerfile -t home-challenge-frontend:latest ./fronted
-        docker run -p 80:80 home-challenge-frontend:latest
-        ```
+## 🗄️ Base de Datos
 
-        4) Infra (Terraform) — revisión/ejecución:
+### Diagrama Entidad-Relación
 
-        ```bash
-        cd infra
-        terraform init
-        terraform plan
-        terraform apply
-        ```
+```
+┌─────────────┐         ┌──────────────┐
+│    USER     │◄───┐    │     ZONE     │
+├─────────────┤    │    ├──────────────┤
+│ id          │    │    │ id           │
+│ username    │    │    │ name         │
+│ password    │    │    │ opening_time │
+│ name        │    │    │ closing_time │
+│ last_name   │    │    │ coordinates  │
+│ email       │    │    │ user_id (FK) │
+│ identification│  │    └──────────────┘
+│ role (ENUM) │    │
+│ coordenadas │    │
+│ created_at  │    │
+└─────────────┘    │
+                   │
+                   │ 1:1
+                   └──────┘
+```
 
-        ## Notas importantes y problemas conocidos
+### Relaciones
 
-        - API URL en frontend: `fronted/src/services/api.js` usa `http://localhost:8080/api/v1/auth` mientras que el backend expone `/auth`. Esto rompe autentificación. Recomendación: actualizar `API_URL` a `http://localhost:8080/auth` o cambiar rutas del backend para mantener prefijo `/api/v1`.
-        - Dependencia duplicada: `spring-boot-starter-security` aparece dos veces en `backend/pom.xml`. Eliminar la duplicación.
-        - React está en versión RC en `fronted/package.json` (React 19 RC). Recomiendo fijar a una versión estable (ej. `^18.2.0`) para producción.
-        - Terraform/Seguridad: el security group en `infra/main.tf` permite SSH (22) desde `0.0.0.0/0`. Restringir a rangos conocidos o usar bastion.
-        - AMI hardcoded en `infra/main.tf`; parametrizar por región y/o variable.
+- **USER ↔ ZONE**: Relación 1:1 (Un usuario tiene una zona, una zona pertenece a un usuario)
+- **USER.role**: Enum (`USER`, `ADMIN`)
 
-        ## Endpoints principales
+### Scripts de Creación
 
-        - `POST /auth/login` — login
-        - `POST /auth/signup` — registro
-        - Resto de endpoints bajo `/user`, `/admin`, `/zones` según controladores en `backend/src/main/java/com/homechallenger/controller`.
+Las tablas se crean automáticamente con `spring.jpa.hibernate.ddl-auto=update`. Para crear manualmente:
 
-        ## Recomendaciones rápidas (prioritarias)
+```sql
+CREATE TYPE role_enum AS ENUM ('USER', 'ADMIN');
 
-        1. Corregir `fronted/src/services/api.js` para apuntar al endpoint correcto.
-        2. Eliminar dependencia duplicada en `backend/pom.xml`.
-        3. Restringir reglas de SSH en `infra/main.tf` y parametrizar AMI.
-        4. Fijar React a versión estable en `fronted/package.json`.
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    identification VARCHAR(255) UNIQUE NOT NULL,
+    role role_enum NOT NULL,
+    coordenadas_domicilio VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
-        ## ¿Quieres que aplique estas correcciones ahora?
+CREATE TABLE zone (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    opening_time TIME,
+    closing_time TIME,
+    coordinates TEXT,
+    user_id INTEGER UNIQUE REFERENCES users(id)
+);
+```
 
-        Si quieres, puedo:
+---
 
-        - Corregir `fronted/src/services/api.js` (cambio inmediato)
-        - Actualizar `backend/pom.xml` para eliminar duplicado
-        - Sugerir cambios en `infra/main.tf` (ejemplo de seguridad)
+## ☁️ Infraestructura con Terraform
 
-        Indica cuáles aplico y procedo.
+### Despliegue en AWS
 
-        ## Infra — Terraform y arquitectura (para prueba técnica)
+1. Configurar credenciales de AWS:
+   ```bash
+   aws configure
+   ```
 
-        Objetivo: describir una arquitectura reproducible, segura y adecuada para una prueba técnica, y dar pasos/variables claras para desplegar.
+2. Navegar al directorio de infraestructura:
+   ```bash
+   cd infra
+   ```
 
-        - Arquitectura propuesta (mínimo viable para la prueba):
-          - VPC con subredes públicas y privadas.
-          - Load Balancer público (ALB) en subredes públicas, que dirija tráfico a Servicios en subredes privadas.
-          - Backend desplegado en ECS Fargate (o Auto Scaling Group de EC2) con imagen Docker; frontend servido por S3+CloudFront o Nginx en contenedor detrás del ALB.
-          - Base de datos gestionada (RDS PostgreSQL) en subredes privadas o usar Supabase como servicio gestionado.
-          - Secrets en AWS Secrets Manager o Parameter Store; no almacenar secretos en Terraform state sin cifrado.
+3. Inicializar Terraform:
+   ```bash
+   terraform init
+   ```
 
-        - Seguridad y buenas prácticas:
-          - No permitir SSH desde `0.0.0.0/0`. Usar IPs permitidas o SSM Session Manager para acceso remoto.
-          - Restringir IAM a principios de mínimo privilegio; usar roles por servicio (task role, instance profile, etc.).
-          - Habilitar HTTPS en ALB (certificado ACM) y redirigir HTTP a HTTPS.
-          - Logs y métricas: CloudWatch (aplicación + ALB + RDS). Añadir alertas básicas.
+4. Revisar el plan de ejecución:
+   ```bash
+   terraform plan
+   ```
 
-        - Estructura de Terraform recomendada (repositorio):
-          - `infra/modules/` — módulos reutilizables (vpc, ecs, rds, alb, security-group)
-          - `infra/envs/dev/` `infra/envs/prod/` — stacks por entorno que consumen módulos
-          - `infra/scripts/` — helpers para `terraform fmt`/`validate`/`workspace`
+5. Aplicar los cambios:
+   ```bash
+   terraform apply
+   ```
 
-        - Variables útiles (ejemplo mínimo para `infra/terraform.tfvars`):
-          - `region = "us-west-1"`
-          - `environment = "dev"`
-          - `vpc_cidr = "10.0.0.0/16"`
-          - `allowed_ssh_cidr = "YOUR_IP/32"`
-          - `ami = "ami-..."` (parametrizar por región)
+### Variables de Terraform
 
-        - Comandos rápidos:
+Edita `infra/variables.tf` o crea `terraform.tfvars`:
 
-        ```bash
-        cd infra
-        terraform init
-        terraform plan -var-file=terraform.tfvars
-        terraform apply -var-file=terraform.tfvars
-        ```
+```hcl
+key_pair_name = "mi-keypair"
+ami_id = "ami-07ff62358b87c7116"  # Amazon Linux 3
+instance_name = "home-challenge-instance"
+rsa_bits = 4096
+allowed_ingress_ports = [22, 80]
+```
 
-        - CI/CD recomendado para prueba técnica:
-          - Pipeline en GitHub Actions / GitLab CI que haga:
-            1. Lint y tests para backend y frontend.
-            2. Build de imágenes Docker y push a registry (ECR/DockerHub).
-            3. Run `terraform fmt`/`validate` and `terraform plan` (en entorno de PR).
-            4. (manual) `terraform apply` en `main` o `prod` con `approval`.
+### Recursos Creados
 
-        - Outputs y validaciones esperadas tras `apply`:
-          - URL pública del ALB / CloudFront.
-          - Endpoint de base de datos (si aplica), nombre del cluster/servicio.
-          - ARN del role de ejecución y ubicación del bucket para artefactos.
+- **EC2 Instance**: Instancia t3.micro con Amazon Linux 3
+- **Security Group**: Permite tráfico SSH (22) y HTTP (80)
+- **Key Pair**: Par de llaves SSH para acceso
+- **User Data**: Script de arranque que instala Docker y Nginx
 
-        Notas finales: si quieres, puedo preparar una propuesta de `infra/` con módulos mínimos (VPC + ALB + ECS Fargate + RDS) y un ejemplo de pipeline CI (GitHub Actions) lista para ejecutar en la prueba técnica.
+### Notas de Seguridad
+
+⚠️ **Importante**: El security group actual permite SSH desde `0.0.0.0/0`. Para producción, restringe el acceso SSH a IPs específicas:
+
+```hcl
+ingress {
+  from_port   = 22
+  to_port     = 22
+  protocol    = "tcp"
+  cidr_blocks = ["TU_IP/32"]  # Solo tu IP
+}
+```
+
+---
+
+## 🔐 Variables de Entorno
+
+### Backend
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `DATABASE_URL` | URL de conexión a PostgreSQL | `jdbc:postgresql://localhost:5432/home_challenger` |
+| `USER` | Usuario de la base de datos | `postgres` |
+| `PASSWORD` | Contraseña de la base de datos | `postgres` |
+| `SECRET` | Clave secreta para JWT | `tu-clave-secreta-muy-larga-y-segura` |
+
+### Frontend
+
+El frontend usa la URL de la API configurada en `src/services/api.js` y `src/services/auth.js`. Por defecto apunta a `http://localhost:8080/api/v1`.
+
+---
+
+## 📖 Documentación API
+
+La documentación interactiva de la API está disponible en:
+
+- **Swagger UI**: `http://localhost:8080/api/v1/swagger-ui.html`
+- **OpenAPI JSON**: `http://localhost:8080/api/v1/v3/api-docs`
+
+---
 
 
-docker build -t ejcondorf88/fronted:1.4.0 --no-cache -f fronted\docker\Dockerfile .
-docker push ejcondorf88/fronted:1.4.0 
 
+## 🤝 Contribución
 
-docker build -t ejcondorf88/backend:1.4.0 --no-cache -f backend\docker\Dockerfile .
-docker push ejcondorf88/backend:1.4.0
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
+---
 
+## 📄 Licencia
 
-https://excalidraw.com/#json=HX2_8_Qp7GUkgmAbRNFp0,TMPO73YZQXBncnehG2F3AA
+Este proyecto es parte de un challenge técnico.
+
+---
+
+## 👤 Autor
+
+**ejcondorf88**
+
+- GitHub: [@ejcondorf88](https://github.com/ejcondorf88)
+
+---
+
