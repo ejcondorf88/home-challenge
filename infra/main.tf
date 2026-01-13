@@ -53,6 +53,18 @@ resource "aws_security_group" "infra_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port   = var.allowed_ingress_ports[2]
+    to_port     = var.allowed_ingress_ports[2]
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = var.allowed_ingress_ports[3]
+    to_port     = var.allowed_ingress_ports[3]
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0

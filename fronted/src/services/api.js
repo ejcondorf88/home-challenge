@@ -1,10 +1,9 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:8080/api/v1/auth";
+import { API_AUTH_URL } from "../config/api";
 
 export const registerUser = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/signup`, userData, {
+    const response = await axios.post(`${API_AUTH_URL}/signup`, userData, {
       headers: {
         "Content-Type": "application/json",
       },

@@ -36,5 +36,5 @@ variable "rsa_bits" {
 variable "allowed_ingress_ports" {
   description = "Puertos permitidos en el Security Group"
   type        = list(number)
-  default     = [22, 80]
+  default     = [22, 80, 9000, 8080]
 }

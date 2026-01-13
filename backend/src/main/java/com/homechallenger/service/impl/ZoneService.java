@@ -1,4 +1,4 @@
-package com.homechallenger.service;
+package com.homechallenger.service.impl;
 
 import com.homechallenger.domain.entity.Zone;
 import com.homechallenger.dto.request.ZoneRequestDto;
@@ -8,7 +8,7 @@ import com.homechallenger.exception.ResourceNotFoundException;
 import com.homechallenger.mapper.UserDtoMapper;
 import com.homechallenger.mapper.ZoneDtoMapper;
 import com.homechallenger.repository.ZoneRepository;
-import org.modelmapper.ModelMapper;
+import com.homechallenger.service.ZoneServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ZoneService {
+public class ZoneService implements ZoneServiceInterface {
     private final ZoneDtoMapper modelMapper;
     private final UserDtoMapper userDtoMapper;
 
-    private ZoneRepository zoneRepository;
+    private final ZoneRepository zoneRepository;
 
     @Autowired
     public ZoneService(ZoneRepository zoneRepository, ZoneDtoMapper zoneDtoMapper, UserDtoMapper userDtoMapper) {
