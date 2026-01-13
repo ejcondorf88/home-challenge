@@ -2,6 +2,7 @@ import { useState } from "react";
 import { loginUser } from "../services/auth";
 import { useNavigate } from "react-router-dom";
 import { validateForm, validateLoginForm } from "../utils/validate";
+import { isAdmin } from "../utils/jwt";
 
 export const useLoginForm = () => {
   const navigate = useNavigate();
@@ -41,8 +42,13 @@ export const useLoginForm = () => {
 
     setIsLoading(true);
     try {
-      const response = await loginUser(formData.userName, formData.password);
-      response.rol === "ADMIN" ? navigate("/admin") : navigate("/dashboard");
+      await loginUser(formData.userName, formData.password);
+      // Usar el JWT decodificado para determinar el rol
+      if (isAdmin()) {
+        navigate("/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       setErrors((prev) => ({
         ...prev,

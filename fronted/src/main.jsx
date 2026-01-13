@@ -11,14 +11,17 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
 import { PrimeReactProvider } from 'primereact/api';
+import { loadApiConfig } from './config/api';
 
-createRoot(document.getElementById('root')).render(
-  <PrimeReactProvider>
-  <BrowserRouter>
-  <StrictMode>
-    <App  />
-  </StrictMode>
-  </BrowserRouter>
-  </PrimeReactProvider>
-
-)
+// Cargar configuración de API antes de renderizar la app
+loadApiConfig().then(() => {
+  createRoot(document.getElementById('root')).render(
+    <PrimeReactProvider>
+    <BrowserRouter>
+    <StrictMode>
+      <App  />
+    </StrictMode>
+    </BrowserRouter>
+    </PrimeReactProvider>
+  )
+});
