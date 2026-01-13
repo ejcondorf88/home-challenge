@@ -20,7 +20,7 @@ public class ZoneService implements ZoneServiceInterface {
     private final ZoneDtoMapper modelMapper;
     private final UserDtoMapper userDtoMapper;
 
-    private ZoneRepository zoneRepository;
+    private final ZoneRepository zoneRepository;
 
     @Autowired
     public ZoneService(ZoneRepository zoneRepository, ZoneDtoMapper zoneDtoMapper, UserDtoMapper userDtoMapper) {
