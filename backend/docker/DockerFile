@@ -42,4 +42,3 @@ EXPOSE 8080
 
 # Ejecutar aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
-#Cambiar el nombre del archivo DockerFile a Dockerfile
