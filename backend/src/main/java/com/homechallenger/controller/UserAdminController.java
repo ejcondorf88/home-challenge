@@ -3,7 +3,8 @@ package com.homechallenger.controller;
 import com.homechallenger.dto.request.SignUpRequestDto;
 import com.homechallenger.dto.response.UserResponseDto;
 import com.homechallenger.dto.request.UserRequestDto;
-import com.homechallenger.service.UserService;
+import com.homechallenger.service.UserInterface;
+import com.homechallenger.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.List;
 public class UserAdminController {
 
     @Autowired
-    private UserService userService;
+    private UserInterface userService;
 
     // Obtener todos los usuarios
     @GetMapping
