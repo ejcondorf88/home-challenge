@@ -10,6 +10,7 @@ import com.homechallenger.dto.response.UserResponseDto;
 import com.homechallenger.exception.BadRequestException;
 import com.homechallenger.mapper.UserDtoMapper;
 import com.homechallenger.repository.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,56 +30,78 @@ public class UserService  implements UserInterface {
     private final UserDtoMapper userDtoMapper;
 
     private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDtoMapper userDtoMapper,
-                       TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public UserService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            UserDtoMapper userDtoMapper,
+            TokenProvider tokenProvider,
+            AuthenticationManager authenticationManager
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userDtoMapper = userDtoMapper;
         this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.authenticationManager = authenticationManager;
     }
+
 
     @Transactional
-    public AuthResponseDto login(AuthRequestDto singUpDto) {
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(singUpDto.getUsername(),singUpDto.getPassword());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String accessToken = tokenProvider.createToken(authentication);
+public AuthResponseDto login(AuthRequestDto singUpDto) {
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    singUpDto.getUsername().trim(),
+                    singUpDto.getPassword().trim()
+            )
+    );
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String accessToken = tokenProvider.createToken(authentication);
         UserResponseDto userResponseDto = userDtoMapper.toUserResponseDto(userRepository.findByUsername(singUpDto.getUsername()).orElseThrow());
+        ;
         userResponseDto.setRol(userRepository.findByUsername(singUpDto.getUsername()).orElseThrow().getRole());
-        return userDtoMapper.toAuthResponseDto(accessToken,userResponseDto);
-    }
+
+
+    return userDtoMapper.toAuthResponseDto(accessToken, userResponseDto);
+}
+
+
     @Transactional
     public UserResponseDto signUp(SignUpRequestDto singUpDto) {
-        boolean exists = userRepository.existsByUsername(singUpDto.getEmail());
-        if (exists) {
+
+        if (userRepository.existsByUsername(singUpDto.getEmail())) {
             throw new BadRequestException("User already exists");
         }
 
-        // Generar un username basado en el nombre y apellidos
+        // Generar username
         String username = generateUsername(singUpDto.getName(), singUpDto.getLastName());
+        System.out.println("🆔 Username generado: " + username);
 
-        // Generar una contraseña aleatoria
+        // Generar contraseña
         String password = RandomStringUtils.randomAlphanumeric(8);
 
-        // Crear y guardar el usuario
+        // Crear usuario
         User user = userDtoMapper.toUser(singUpDto);
-        user.setRole(singUpDto.getRol()); // Asegurar que el rol se tome del DTO de entrada
+        user.setRole(singUpDto.getRol());
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password)); // Guardar la contraseña encriptada
+
+        // Encriptar password
+        String encodedPassword = passwordEncoder.encode(password);
+
+        user.setPassword(encodedPassword);
+
         User savedUser = userRepository.save(user);
 
-        // Devolver la respuesta con username y contraseña
+        // Respuesta
         UserResponseDto responseDto = userDtoMapper.toUserResponseDto(savedUser);
         responseDto.setUsername(username);
-        responseDto.setPassword(password);
+        responseDto.setPassword(password); // solo para mostrar/enviar
         responseDto.setRol(savedUser.getRole());
-        // Enviar la contraseña generada
+
+
         return responseDto;
     }
+
 
     /**
      * Genera un username único basado en los nombres y apellidos.

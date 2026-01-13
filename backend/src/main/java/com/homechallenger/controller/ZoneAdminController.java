@@ -14,7 +14,7 @@ import java.util.List;
 public class ZoneAdminController {
     private final ZoneServiceInterface zoneService;
 
-    public ZoneAdminController(ZoneService zoneService) {
+    public ZoneAdminController(ZoneServiceInterface zoneService) {
         this.zoneService = zoneService;
     }
     @GetMapping
