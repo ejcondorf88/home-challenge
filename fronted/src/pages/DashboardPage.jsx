@@ -1,33 +1,61 @@
 import { Card } from 'primereact/card';
 import { Divider } from 'primereact/divider';
-import { Panel } from 'primereact/panel';
-import { MapDev } from '../components/map/MapDev';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useDashboard } from '../hooks/useDashBoard';
 import './DashboardPage.css';
+import { DashboardHeader } from '../components/dashboard/DashBoardHeader';
+import { AdminTabs } from '../components/dashboard/AdminTabs';
+import { UserDashboard } from '../components/dashboard/UserDashboard';
 
 export const DashboardPage = () => {
-    // Obtener coordenadas del localStorage
-    const coords = localStorage.getItem("coordenadasDomicilio")?.split(',') || [0, 0];
-    const [lat, lng] = coords.map(coord => parseFloat(coord));
+    const {
+        username,
+        isUserAdmin,
+        isLoading,
+        handleLogout,
+        lat,
+        lng,
+        refreshKey,
+        handleUserCreated
+    } = useDashboard();
+
+    if (isLoading) {
+        return (
+            <div className="dashboard-page loading-container">
+                <ProgressSpinner 
+                    style={{ width: '50px', height: '50px' }}
+                    strokeWidth="4"
+                    animationDuration=".5s"
+                />
+                <p className="loading-text">Cargando dashboard...</p>
+            </div>
+        );
+    }
 
     return (
-        <div className="dashboard-page">
-            <Card className="dashboard-container">
-                <div className="dashboard-header">
-                    <h1 className="dashboard-title">Dashboard de Usuario</h1>
-                    <p className="dashboard-description">
-                        Aquí puedes visualizar la ubicación en el mapa con las coordenadas del domicilio del usuario.
-                    </p>
-                </div>
-                
-                <Divider />
-                
-                <Panel header="Ubicación en el Mapa">
-                    <div className="map-container">
-                        <MapDev className="dashboard-map" lat={lat} lng={lng} />
+        <div className="dashboard-page-modern">
+            <div className="dashboard-wrapper">
+                <Card className="dashboard-card-modern">
+                    <DashboardHeader 
+                        username={username} 
+                        isUserAdmin={isUserAdmin} 
+                        onLogout={handleLogout} 
+                    />
+                    <Divider />
+                    <div className="dashboard-content">
+                        {isUserAdmin ? (
+                            <AdminTabs 
+                                refreshKey={refreshKey} 
+                                onUserCreated={handleUserCreated} 
+                                lat={lat} 
+                                lng={lng} 
+                            />
+                        ) : (
+                            <UserDashboard lat={lat} lng={lng} />
+                        )}
                     </div>
-                </Panel>
-            </Card>
+                </Card>
+            </div>
         </div>
     );
 };
-

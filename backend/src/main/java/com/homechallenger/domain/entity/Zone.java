@@ -1,77 +1,36 @@
 package com.homechallenger.domain.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalTime;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Table(name = "zone")
+import java.time.LocalTime;
+
 @Entity
+@Table(name = "zone")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Zone {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "opening_time")
-    private LocalTime openingTime; // Hora de apertura
+    @Column(name = "opening_time", nullable = false)
+    private LocalTime openingTime;
 
-    @Column(name = "closing_time")
-    private LocalTime closingTime; // Hora de cierre
+    @Column(name = "closing_time", nullable = false)
+    private LocalTime closingTime;
 
-    @Column(name = "coordinates")
-    private String coordinates; // Coordenadas en formato JSON
+    @Column(name = "coordinates", nullable = false, columnDefinition = "TEXT")
+    private String coordinates; // Coordenadas en formato JSON o WKT
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
-
-
-    // Getters y Setters
-    public Integer getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalTime getOpeningTime() {
-        return openingTime;
-    }
-
-    public void setOpeningTime(LocalTime openingTime) {
-        this.openingTime = openingTime;
-    }
-
-    public LocalTime getClosingTime() {
-        return closingTime;
-    }
-
-    public void setClosingTime(LocalTime closingTime) {
-        this.closingTime = closingTime;
-    }
-
-    public String getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(String coordinates) {
-        this.coordinates = coordinates;
-    }
 }

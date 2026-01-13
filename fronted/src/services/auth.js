@@ -1,15 +1,13 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:8080/api/v1/auth";
+import { API_AUTH_URL } from "../config/api";
 
 export const loginUser = async (username, password) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, { username, password }, {
+    const response = await axios.post(`${API_AUTH_URL}/login`, { username, password }, {
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
     const data = response.data;
 
     // Store auth token if provided
@@ -27,4 +25,10 @@ export const loginUser = async (username, password) => {
       throw new Error("Network error or unexpected issue");
     }
   }
+};
+
+export const logout = () => {
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("coordenadasDomicilio");
+  // Limpiar cualquier otro dato del localStorage si es necesario
 };
