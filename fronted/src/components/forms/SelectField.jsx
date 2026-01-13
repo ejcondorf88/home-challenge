@@ -1,4 +1,3 @@
-import React from 'react';
 import { Dropdown } from 'primereact/dropdown';
 
 export const SelectField = ({

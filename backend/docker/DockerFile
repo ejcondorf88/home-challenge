@@ -1,28 +1,45 @@
 # ============================
-# Fase 1: Compilación con Maven
+# Fase 1: Dependencias
 # ============================
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-
-# Definir directorio de trabajo
+FROM maven:3.9.6-eclipse-temurin-17 AS deps
 WORKDIR /app
 
-# Copiar archivos de Maven
+# Copiar solo el pom para cachear dependencias
+COPY pom.xml .
+
+# Descargar dependencias sin compilar
+RUN mvn dependency:go-offline -B
+
+
+# ============================
+# Fase 2: Build
+# ============================
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /app
+
+# Reutilizar repositorio Maven descargado
+COPY --from=deps /root/.m2 /root/.m2
+
+# Copiar código fuente
 COPY pom.xml .
 COPY src ./src
 
+# Compilar
 RUN mvn clean package -DskipTests
 
-# ============================
-# Fase 2: Imagen final
-# ============================
-FROM eclipse-temurin:17-jre
 
-# Definir directorio de trabajo
+# ============================
+# Fase 3: Runtime
+# ============================
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Copiar el JAR generado desde la fase de build
+# Copiar el JAR generado
 COPY --from=build /app/target/*.jar app.jar
 
-# Comando de ejecución
+# Exponer puerto (opcional, según tu app)
+EXPOSE 8080
+
+# Ejecutar aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
 #Cambiar el nombre del archivo DockerFile a Dockerfile

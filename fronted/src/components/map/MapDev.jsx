@@ -1,38 +1,55 @@
-import React, { useEffect, useRef } from 'react';
-import L from 'leaflet'; // Importa Leaflet
+import { useRef } from 'react';
+import { useLeafletMap } from '../../hooks/useLeafletMap';
+import 'leaflet/dist/leaflet.css';
 
-export const MapDev = ({ lat, lng }) => {
-  // Usamos useRef para referenciar el contenedor del mapa
-  const mapRef = useRef(null);
-  const mapInstance = useRef(null); // Referencia para la instancia del mapa
+// Fix para los iconos de Leaflet
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 
-  useEffect(() => {
-    // Si ya existe una instancia del mapa, la destruimos antes de crear una nueva
-    if (mapInstance.current) {
-      mapInstance.current.remove();
-    }
+delete L.Icon.Default.prototype._getIconUrl;
 
-    // Inicializar el mapa en el contenedor referenciado
-    const map = L.map(mapRef.current).setView([lat, lng], 13);
+L.Icon.Default.mergeOptions({
+    iconUrl: icon,
+    iconRetinaUrl: iconRetina,
+    shadowUrl: iconShadow,
+});
 
-    // Agregar capa de tiles de OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+export const MapDev = ({ lat = 0, lng = 0, className }) => {
+    const mapRef = useRef(null);
 
-    // Agregar un marcador en las coordenadas proporcionadas
-    L.marker([lat, lng]).addTo(map).bindPopup('Aquí está tu lugar').openPopup();
+    // Usar hook personalizado con todas las opciones
+    useLeafletMap(mapRef, lat, lng, {
+        mapOptions: {
+            zoom: 13,
+            zoomControl: true,
+            scrollWheelZoom: true,
+            doubleClickZoom: true,
+            dragging: true,
+        },
+        animationOptions: {
+            duration: 1.5,
+            easeLinearity: 0.5
+        },
+        eventHandlers: {
+            // Opcional: agregar manejadores de eventos
+            // click: (e) => console.log('Mapa clickeado:', e.latlng),
+            // zoom: () => console.log('Zoom cambiado')
+        }
+    });
 
-    // Guardamos la instancia del mapa
-    mapInstance.current = map;
-
-    // Cleanup: destruir el mapa cuando el componente se desmonte
-    return () => {
-      if (mapInstance.current) {
-        mapInstance.current.remove();
-      }
-    };
-  }, [lat, lng]); // Se vuelve a inicializar el mapa si las coordenadas cambian
-
-  return <div ref={mapRef} style={{ height: '500px', width: '100%' }} />; // Estilos del mapa
+    return (
+        <div 
+            ref={mapRef} 
+            className={className}
+            style={{ 
+                width: '100%', 
+                height: '100%',
+                minHeight: '500px',
+                borderRadius: '8px',
+                overflow: 'hidden'
+            }}
+        />
+    );
 };
