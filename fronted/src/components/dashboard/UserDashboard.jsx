@@ -1,4 +1,4 @@
-import { DashboardMapPanel } from "./DashboardMapPanel.JSX";
+import { DashboardMapPanel } from "./DashboardMapPanel";
 
 export const UserDashboard = ({ lat, lng }) => (
     <div className="user-content">

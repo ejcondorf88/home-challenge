@@ -9,25 +9,21 @@ import com.homechallenger.mapper.UserDtoMapper;
 import com.homechallenger.mapper.ZoneDtoMapper;
 import com.homechallenger.repository.ZoneRepository;
 import com.homechallenger.service.ZoneServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
+
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
+
 public class ZoneService implements ZoneServiceInterface {
     private final ZoneDtoMapper modelMapper;
     private final UserDtoMapper userDtoMapper;
-
     private final ZoneRepository zoneRepository;
 
-    @Autowired
-    public ZoneService(ZoneRepository zoneRepository, ZoneDtoMapper zoneDtoMapper, UserDtoMapper userDtoMapper) {
-        this.zoneRepository = zoneRepository;
-        this.modelMapper =  zoneDtoMapper;
-        this.userDtoMapper = userDtoMapper;
-    }
 
     public ZoneResponseDto getZoneById(Integer id) {
         Zone zone = zoneRepository.findById(id)
