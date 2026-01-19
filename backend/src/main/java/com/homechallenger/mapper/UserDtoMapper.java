@@ -4,22 +4,22 @@ import com.homechallenger.domain.entity.User;
 import com.homechallenger.dto.request.SignUpRequestDto;
 import com.homechallenger.dto.response.AuthResponseDto;
 import com.homechallenger.dto.response.UserResponseDto;
+
+import lombok.AllArgsConstructor;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 
 @Component
+@AllArgsConstructor
 public class UserDtoMapper {
 
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public UserDtoMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-    }
+  
     public UserResponseDto mapToUserResponseDto(User user) {
         return modelMapper.map(user, UserResponseDto.class);
     }

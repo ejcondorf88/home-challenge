@@ -3,7 +3,9 @@ package com.homechallenger.controller;
 import com.homechallenger.dto.request.ZoneRequestDto;
 import com.homechallenger.dto.response.ZoneResponseDto;
 import com.homechallenger.service.ZoneServiceInterface;
-import com.homechallenger.service.impl.ZoneService;
+
+import lombok.AllArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,12 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/zones")
+@AllArgsConstructor
 public class ZoneAdminController {
     private final ZoneServiceInterface zoneService;
 
-    public ZoneAdminController(ZoneServiceInterface zoneService) {
-        this.zoneService = zoneService;
-    }
+ 
     @GetMapping
     public ResponseEntity<List<ZoneResponseDto>> getAllZones() {
         return ResponseEntity.ok(zoneService.getAllZones());

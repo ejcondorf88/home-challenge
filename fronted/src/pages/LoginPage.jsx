@@ -3,8 +3,8 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
 import { User, Lock } from 'lucide-react';
-import { InputField } from '../components/forms/InputField';
-import { useLoginForm } from '../hooks/useLoginForm';
+import { InputField } from '../components';
+import { useLoginForm } from '../hooks';
 import './LoginPage.css';
 
 export const LoginPage = () => {

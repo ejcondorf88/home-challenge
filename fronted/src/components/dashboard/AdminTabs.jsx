@@ -1,6 +1,6 @@
 import { TabView, TabPanel } from 'primereact/tabview';
-import { DashboardMapPanel } from './DashboardMapPanel.JSX';
-import { UserRegistrationForm } from '../admin/UserRegistrationForm.jsx';
+import { DashboardMapPanel } from './DashboardMapPanel';
+import { UserRegistrationForm } from '../admin';
 export const AdminTabs = ({ refreshKey, onUserCreated, lat, lng }) => (
     <TabView className="dashboard-tabview">
         <TabPanel 

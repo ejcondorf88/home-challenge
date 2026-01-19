@@ -5,7 +5,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
+import lombok.Getter;
+import lombok.Setter;
+@Getter
+@Setter
 public class SignUpRequestDto {
     @NotBlank(message = "La cédula es obligatoria")
     private String identification;
@@ -28,53 +31,6 @@ public class SignUpRequestDto {
     @NotNull(message = "El rol es obligatorio")
     private Role rol;
 
-    public String getIdentification() {
-        return identification;
-    }
-
-    public void setIdentification(String identification) {
-        this.identification = identification;
-    }
-
-    public String getCoordenadasDomicilio() {
-        return coordenadasDomicilio;
-    }
-
-    public void setCoordenadasDomicilio(String coordenadasDomicilio) {
-        this.coordenadasDomicilio = coordenadasDomicilio;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Role getRol() {
-        return rol;
-    }
-
-    public void setRol(Role rol) {
-        this.rol = rol;
-    }
-
+   
 
 }

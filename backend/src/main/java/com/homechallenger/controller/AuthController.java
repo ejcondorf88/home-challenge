@@ -5,8 +5,9 @@ import com.homechallenger.dto.request.SignUpRequestDto;
 import com.homechallenger.dto.response.AuthResponseDto;
 import com.homechallenger.dto.response.UserResponseDto;
 import com.homechallenger.service.UserInterface;
-import com.homechallenger.service.impl.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.AllArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@AllArgsConstructor
 public class AuthController {
     private final UserInterface userService;
-    @Autowired
-    public AuthController(UserInterface userService) {
-        this.userService = userService;
-    }
+ 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto authRequestDto) {
         AuthResponseDto authResponseDto = userService.login(authRequestDto);

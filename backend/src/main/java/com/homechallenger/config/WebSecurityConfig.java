@@ -3,6 +3,9 @@ package com.homechallenger.config;
 import com.homechallenger.security.JWTFilter;
 import com.homechallenger.security.TokenProvider;
 import com.homechallenger.security.UserDetailServiceImpl;
+
+import lombok.AllArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,19 +19,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 @Configuration
+@AllArgsConstructor
 public class WebSecurityConfig {
 
     private final TokenProvider tokenProvider;
-    private final UserDetailServiceImpl  userDetailService; // 🔥 AQUÍ ESTÁ LA CLAVE
+    private final UserDetailServiceImpl  userDetailService; 
 
-    public WebSecurityConfig(TokenProvider tokenProvider,UserDetailServiceImpl userDetailService ) {
-        this.tokenProvider = tokenProvider;
-        this.userDetailService=userDetailService;
-    }
-
+  
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

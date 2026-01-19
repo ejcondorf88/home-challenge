@@ -1,6 +1,9 @@
 package com.homechallenger.service.impl;
 import com.homechallenger.dto.request.UserRequestDto;
 import com.homechallenger.service.UserInterface;
+
+import lombok.AllArgsConstructor;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import com.homechallenger.domain.entity.User;
 import com.homechallenger.dto.request.AuthRequestDto;
@@ -12,7 +15,6 @@ import com.homechallenger.mapper.UserDtoMapper;
 import com.homechallenger.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
+    @Transactional
+
 public class UserService  implements UserInterface {
     private  final  UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -32,22 +37,6 @@ public class UserService  implements UserInterface {
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    public UserService(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            UserDtoMapper userDtoMapper,
-            TokenProvider tokenProvider,
-            AuthenticationManager authenticationManager
-    ) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.userDtoMapper = userDtoMapper;
-        this.tokenProvider = tokenProvider;
-        this.authenticationManager = authenticationManager;
-    }
-
-
-    @Transactional
 public AuthResponseDto login(AuthRequestDto singUpDto) {
     Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
@@ -66,7 +55,6 @@ public AuthResponseDto login(AuthRequestDto singUpDto) {
 }
 
 
-    @Transactional
     public UserResponseDto signUp(SignUpRequestDto singUpDto) {
 
         if (userRepository.existsByUsername(singUpDto.getEmail())) {
