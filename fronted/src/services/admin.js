@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_ADMIN_URL } from "../config/api";
 
 // Crear instancia de axios con interceptor para agregar el token
-const createAuthenticatedAxios = () => {
+export const createAuthenticatedAxios = () => {
   const instance = axios.create();
   
   instance.interceptors.request.use(

@@ -4,9 +4,8 @@ import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
 import { Dialog } from 'primereact/dialog';
 import { Mail, MapPin, User, CreditCard } from 'lucide-react';
-import { InputField } from '../components/forms/InputField';
-import { SelectField } from '../components/forms/SelectField';
-import { useRegisterForm } from '../hooks/useRegisterForm';
+import { InputField, SelectField } from '../components';
+import { useRegisterForm } from '../hooks';
 import './RegisterPage.css';
 
 const roleOptions = [

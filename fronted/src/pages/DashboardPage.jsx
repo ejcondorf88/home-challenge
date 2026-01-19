@@ -1,11 +1,9 @@
 import { Card } from 'primereact/card';
 import { Divider } from 'primereact/divider';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { useDashboard } from '../hooks/useDashBoard';
+import { useDashboard } from '../hooks';
+import { DashboardHeader, AdminTabs, UserDashboard } from '../components';
 import './DashboardPage.css';
-import { DashboardHeader } from '../components/dashboard/DashBoardHeader';
-import { AdminTabs } from '../components/dashboard/AdminTabs';
-import { UserDashboard } from '../components/dashboard/UserDashboard';
 
 export const DashboardPage = () => {
     const {

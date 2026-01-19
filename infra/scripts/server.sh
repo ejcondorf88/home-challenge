@@ -18,8 +18,8 @@ usermod -aG docker ec2-user
 # Ejecutar contenedor (ahora Docker puede usar el puerto 80)
 #En la instancia ec2 se debe hacer el export de las variables de entorno que esta en env.template
 # export DATABASE_URL=jdbc:postgresql://dpg-d5ipuc1r0 
-docker container run -d -p 80:80 --name fronted ejcondorf88/fronted:1.4.3
-#docker container run -d -p 8080:8080 --name backend ejcondorf88/backend:1.4.0
+docker container run -d -p 80:80 --name fronted ejcondorf88/fronted:1.5.0
+#docker container run -d -p 8080:8080 --name backend ejcondorf88/backend:1.5.0
 docker network create fronted-backend-network
 docker network connect fronted-backend-network fronted
 #docker network connect fronted-backend-network backend

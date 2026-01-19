@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class TokenProvider {
     }
     public Authentication getAuthentication(String token) {
         Claims claims = parser.parseClaimsJws(token).getBody();
-        String username = claims.getSubject();
+        //String username = claims.getSubject();
         String role = claims.get("role").toString();
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
 

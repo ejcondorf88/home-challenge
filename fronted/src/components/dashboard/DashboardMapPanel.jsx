@@ -1,6 +1,6 @@
 import { Panel } from 'primereact/panel';
 import { Chip } from 'primereact/chip';
-import { MapDev } from '../map/MapDev';
+import { MapDev } from '../map';
 export const DashboardMapPanel = ({ lat, lng }) => (
     <Panel 
         header="📍 Ubicación en el Mapa" 
